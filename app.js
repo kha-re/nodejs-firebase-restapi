@@ -7,8 +7,11 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(morgan('dev'));
 
-const userRoutes = require("./api/routes/usersRoutes")
+const userRoutes = require("./api/routes/userRoutes")
+const expenseRoutes = require("./api/routes/expenseRoutes")
+
 app.use("/users", userRoutes);
+app.use("/expenses", expenseRoutes);
 
 app.use((req, res, next)=>{
     const error = new Error("Not Found");
