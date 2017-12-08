@@ -1,6 +1,16 @@
 const Model = require("../firebase").Expenses;
 const utils = require("../helpers/utils")
 
+const User  = require("./User");
+
+function attachUser(data) {
+    return User.getOne(data.user_id).then((userResponse)=>{
+        data.user = userResponse.data
+        return data; //utils.makeResponse(200,data)
+    })
+}
+
+
 function all() {
     
     return Model.once('value').then(function(snapshot) {
@@ -19,7 +29,11 @@ function getOne(id) {
     return Model.child(id).once('value').then((snapshot) =>{
         const data = snapshot.val()
         if(data){
-            return utils.makeResponse(200,data)
+            
+            return attachUser(data).then((data)=>{
+                 return utils.makeResponse(200,data)
+            })
+            
         } else {
             return utils.makeResponse(404,null,"Not Found")
         }

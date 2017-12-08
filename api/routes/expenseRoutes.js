@@ -28,7 +28,6 @@ router.post("/",(req, res, next)=>{
     })
 });
 
-
 router.get("/:id",(req, res, next)=>{
     var id = req.params.id;
     Expense.getOne(id).then((response)=>{
