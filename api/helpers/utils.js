@@ -1,9 +1,10 @@
-function makeResponse(status=200,data=null,message=null){
+function makeResponse(status=200,data=null,message=null,alertMessage=null){
     var error = (message!=null) ? { status, message } : null;
     return {
         status:status,
-        data:data,
-        error
+        error,
+        alertMessage,
+        data:data
     }
 }
 

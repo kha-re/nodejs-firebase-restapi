@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const User  = require("../models/users");
+const User  = require("../models/User");
 
 router.get("/",(req, res, next)=>{
     
@@ -11,8 +11,25 @@ router.get("/",(req, res, next)=>{
     });
 });
 
-router.get("/:userId",(req, res, next)=>{
-    var id = req.params.userId;
+router.post("/",(req, res, next)=>{
+
+    var data = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password
+    }
+    
+    var response = User.create(data);
+    
+    res.status(response.status).json({
+        error:response.error,
+        id:response.data.id
+    })
+});
+
+
+router.get("/:id",(req, res, next)=>{
+    var id = req.params.id;
     User.getOne(id).then((response)=>{
       res.status(response.status).json({
           error: response.error,
@@ -21,30 +38,32 @@ router.get("/:userId",(req, res, next)=>{
     });
 });
 
-// router.get("/:userKey",(req, res, next)=>{
-//     var ukey = req.params.userKey;
+router.delete("/:id",(req, res, next)=>{
+    var id = req.params.id;
+    User.remove(id).then((response)=>{
+      res.status(response.status).json({
+          error: response.error,
+          user: response.data
+      })
+    });
+});
 
-//     var userRef = Users.child(ukey);
-
-//       userRef.once('value').then(function(snapshot) {
-//         var user = snapshot.val();
-//         if(user){
-//             writeUserData(ukey, user.email.split("@")[0].toUpperCase(), user.email, "some-url-again");
-//         }
-//         res.status(200).json({
-//             user:user
-//         });
-        
-//       }).catch((error)=> {
-        
-//         res.status(500).json({
-//             error:error
-//         });
-        
-//       });
-
+router.patch("/:id",(req, res, next)=>{
+    var id = req.params.id;
+    var data = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      gender: req.body.gender
+    }
     
-// });
+    User.update(id,data).then((response)=>{
+      res.status(response.status).json({
+          error: response.error,
+          user: response.data
+      })
+    });
+});
 
 
 module.exports = router;

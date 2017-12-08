@@ -1,11 +1,13 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const morgan = require("morgan");
 const app = express();
 
-const userRoutes = require("./api/routes/usersRoutes")
-
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(morgan('dev'));
 
+const userRoutes = require("./api/routes/usersRoutes")
 app.use("/users", userRoutes);
 
 app.use((req, res, next)=>{
