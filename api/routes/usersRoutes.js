@@ -1,12 +1,12 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const User  = require("../models/users");
 
 router.get("/",(req, res, next)=>{
     
     User.all().then((response)=>{
       res.status(response.status).json({
-          users:response.data
+          error: response.error,
+          users: response.data
       })
     });
 });
@@ -15,7 +15,8 @@ router.get("/:userId",(req, res, next)=>{
     var id = req.params.userId;
     User.getOne(id).then((response)=>{
       res.status(response.status).json({
-          user:response.data
+          error: response.error,
+          user: response.data
       })
     });
 });

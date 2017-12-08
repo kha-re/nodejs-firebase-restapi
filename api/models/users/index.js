@@ -1,34 +1,30 @@
-const refs = require("../../firebase/refs")
-const Model  = refs.Users;
+const Model = require("../../firebase").Users;
+const utils = require("../../helpers/utils")
 
 function all() {
     
     return Model.once('value').then(function(snapshot) {
-        return {
-            status: 200,
-            data: snapshot.val()
+        const data = snapshot.val()
+        if(data){
+            return utils.makeResponse(200,data)
+        } else {
+            return utils.makeResponse(404,null,"Not Found")
         }
       }).catch(function(error) {
-        console.log('error',error);
-        return {
-            status: 200,
-            error: { message:error.message },
-        }
+        return utils.makeResponse(500,null,error.message)
       });
 }
 
 function getOne(id) {
     return Model.child(id).once('value').then(function(snapshot) {
-        return {
-            status: 200,
-            data: snapshot.val()
+        const data = snapshot.val()
+        if(data){
+            return utils.makeResponse(200,data)
+        } else {
+            return utils.makeResponse(404,null,"Not Found")
         }
       }).catch(function(error) {
-        console.log('error',error);
-        return {
-            status: 200,
-            error: { message:error.message },
-        }
+        return utils.makeResponse(500, null, error.message)
       });
 }
 
@@ -47,5 +43,7 @@ function getOne(id) {
 //   });
 // }
 
-module.exports.all = all;
-module.exports.getOne = getOne;
+module.exports =  {
+    all,
+    getOne
+}

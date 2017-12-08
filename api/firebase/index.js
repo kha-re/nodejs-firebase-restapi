@@ -1,11 +1,11 @@
-const firebase = require("firebase-admin");
+const firebase = require("./init")
 
-const serviceAccount = require("./nodefire-amit-firebase-adminsdk-lrlpf-7a301e333a.json");
+const db = firebase.database()
+const users = db.ref().child('users')
+const expenses = db.ref().child("expenses")
+const groups = db.ref().child("groups")
 
-firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount),
-  databaseURL: "https://nodefire-amit.firebaseio.com"
-});
-
-
-module.exports = firebase;
+module.exports.DB = db;
+module.exports.Users = users;
+module.exports.Expenses = expenses;
+module.exports.Groups = groups;
